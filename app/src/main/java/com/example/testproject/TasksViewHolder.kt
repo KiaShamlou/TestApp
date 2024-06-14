@@ -36,6 +36,7 @@ class TaskAdapter(val taskList: List<Task>) :
             titleTextView.text = task.title
             descriptionTextView.text = task.description
 
+
         }
     }
 }
