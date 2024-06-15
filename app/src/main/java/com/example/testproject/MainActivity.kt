@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         var dateList = listOf(
             Date(date = 20, day = "Tuesday"),
             Date(date = 21, day = "Wednesday"),
-            Date(date = 22, day = "Thursday", isSelected = true),
+            Date(date = 22, day = "Thursday"),
             Date(date = 23, day = "tuesday"),
             Date(date = 24, day = "tuesday"),
             Date(date = 25, day = "tuesday"),
@@ -50,10 +50,10 @@ class MainActivity : AppCompatActivity() {
     private fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
         var tasksList = listOf(
-            Task(title = "Idea", description = "This is an idea"),
-            Task(title = "Food", description = "This is a food"),
-            Task(title = "Work", description = "This is a work"),
-            Task(title = "Sport", description = "This is a sport"),
+            Task(title = "Idea", description = "This is an idea", imageId = R.drawable.first),
+            Task(title = "Food", description = "This is a food", imageId = R.drawable.second),
+            Task(title = "Work", description = "This is a work", imageId = R.drawable.third),
+            Task(title = "Sport", description = "This is a sport", imageId = R.drawable.fourth),
         )
         //NameAdapter adapter = new NameAdapter(namesList)
         var adapter2 = TaskAdapter(tasksList)
