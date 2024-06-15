@@ -1,14 +1,15 @@
-package com.example.testproject
+package com.example.testproject.task
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
 
-class TaskAdapter(val taskList: List<Task>) :
+class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         //here we indicate that this list should show list_item
@@ -36,7 +37,10 @@ class TaskAdapter(val taskList: List<Task>) :
             titleTextView.text = task.title
             descriptionTextView.text = task.description
 
+            itemView.setOnClickListener {
 
+                onClick(task)
+            }
         }
     }
 }

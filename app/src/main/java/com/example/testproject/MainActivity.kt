@@ -2,33 +2,53 @@ package com.example.testproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testproject.task.Task
 import com.example.testproject.task.TaskActivity
-import com.google.android.material.button.MaterialButton
+import com.example.testproject.task.TaskAdapter
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Log.d("TESTEST", "activity main onCreate")
         showDatesList()
         showTasksList()
-        handleButtonClicks()
     }
 
-    private fun handleButtonClicks(){
+    override fun onStart() {
+        super.onStart()
+        Log.d("TESTEST", "activity main onStart")
+    }
 
-        val button = findViewById<MaterialButton>(R.id.button_go_to_task)
+    override fun onResume() {
+        super.onResume()
+        Log.d("TESTEST", "activity main onResume")
+    }
 
-        button.setOnClickListener {
-            var intent = Intent(this, TaskActivity::class.java)
-            startActivity(intent)
-        }
+    override fun onStop() {
+        super.onStop()
+        Log.d("TESTEST", "activity main onStop")
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TESTEST", "activity main onDestroy")
+    }
+    override fun onPause() {
+        super.onPause()
+
+        Log.d("TESTEST", "activity main onPause")
+    }
+
+    private fun navigateToTaskActivity(taskName: Task){
+        var intent = Intent(this, TaskActivity::class.java)
+        intent.putExtra("TASK_NAME", taskName)
+        startActivity(intent)
     }
     private fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
@@ -56,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             Task(title = "Sport", description = "This is a sport", imageId = R.drawable.fourth),
         )
         //NameAdapter adapter = new NameAdapter(namesList)
-        var adapter2 = TaskAdapter(tasksList)
+        var adapter2 = TaskAdapter(tasksList, ::navigateToTaskActivity)
         recyclerView2.adapter = adapter2
         //a new adapter
         //a data class
