@@ -9,7 +9,7 @@ import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
 
-class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit) :
+class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit,val onLongClick : (Task) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         //here we indicate that this list should show list_item
@@ -41,6 +41,12 @@ class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit) :
 
                 onClick(task)
             }
+            itemView.setOnLongClickListener{
+                onLongClick(task)
+                true
+            }
+
         }
+
     }
 }
