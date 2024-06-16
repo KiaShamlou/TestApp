@@ -16,7 +16,7 @@ import com.example.testproject.task.TaskAdapter
 import com.example.testproject.task.TaskDialogActivity
 
 class MainActivity : AppCompatActivity() {
-
+    var taskAdapter : TaskAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun navigateToDateActivity(dateName: Date){
         var intentt = Intent(this, DateActivity::class.java)
-        intentt.putExtra("Date_NAME",dateName)
+        intentt.putExtra("DATE_NAME",dateName)
         startActivity(intentt)
     }private fun navigateToTaskDialog(taskName: Task){
         var intentt = Intent(this, TaskDialogActivity::class.java)
@@ -63,7 +63,14 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 101 && resultCode == RESULT_OK) {
             val deletedTask = data?.getParcelableExtra<Task>("DELETED_TASK")
             // Update UI or perform actions with the received dataString
-            Toast.makeText(this , deletedTask?.title.toString(),Toast.LENGTH_LONG).show()
+            Toast.makeText(this , deletedTask?.title ,Toast.LENGTH_LONG).show()
+            if(deletedTask != null){
+                taskAdapter?.deleteTask(deletedTask)
+            }
+        }
+
+        if(requestCode == 102 && resultCode == RESULT_OK) {
+
         }
     }
     private fun navigateToTaskActivity(taskName: Task){
@@ -90,15 +97,15 @@ class MainActivity : AppCompatActivity() {
 
     fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
-        var tasksList = listOf(
+        var tasksList = mutableListOf(
             Task(title = "Idea", description = "This is an idea", imageId = R.drawable.first),
             Task(title = "Food", description = "This is a food", imageId = R.drawable.second),
             Task(title = "Work", description = "This is a work", imageId = R.drawable.third),
             Task(title = "Sport", description = "This is a sport", imageId = R.drawable.fourth),
         )
         //NameAdapter adapter = new NameAdapter(namesList)
-        var adapter2 = TaskAdapter(tasksList, ::navigateToTaskActivity , ::navigateToTaskDialog)
-        recyclerView2.adapter = adapter2
+        taskAdapter = TaskAdapter(tasksList, ::navigateToTaskActivity , ::navigateToTaskDialog)
+        recyclerView2.adapter = taskAdapter
         recyclerView2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
     private fun deleteTask(task : Task) {

@@ -9,8 +9,15 @@ import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
 
-class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit,val onLongClick : (Task) -> Unit) :
+class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, val onLongClick: (Task) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
+
+    fun deleteTask(task: Task) {
+        taskList.removeIf { it.title == task.title }
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         //here we indicate that this list should show list_item
         val view = LayoutInflater.from(parent.context)
@@ -28,7 +35,7 @@ class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit,val onLo
     }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val taskImageView : ImageView = itemView.findViewById(R.id.image_view_task)
+        val taskImageView: ImageView = itemView.findViewById(R.id.image_view_task)
         var titleTextView = itemView.findViewById<MaterialTextView>(R.id.text_view_title)
         var descriptionTextView = itemView.findViewById<MaterialTextView>(R.id.text_view_description)
 
@@ -41,7 +48,7 @@ class TaskAdapter(val taskList: List<Task>, val onClick: (Task) -> Unit,val onLo
 
                 onClick(task)
             }
-            itemView.setOnLongClickListener{
+            itemView.setOnLongClickListener {
                 onLongClick(task)
                 true
             }
