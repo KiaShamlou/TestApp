@@ -25,6 +25,9 @@
         <activity android:name=".task.TaskDialogActivity"
             android:theme="@style/Theme.App.Dialog.NoTitle"
             android:excludeFromRecents="true" />
+        <activity android:name=".task.AddTaskDialogActivity"
+        android:theme="@style/Theme.App.Dialog.NoTitle"
+        android:excludeFromRecents="true" />
     </application>
 
 </manifest>

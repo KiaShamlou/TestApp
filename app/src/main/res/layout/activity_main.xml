@@ -19,7 +19,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </com.google.android.material.textfield.TextInputLayout>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionBut"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="30dp"
+        app:srcCompat="@drawable/img"
+        android:scaleType="center"
+        app:maxImageSize="80dp"
+        app:fabCustomSize="80dp"
+        android:contentDescription="Enter How Much Cookies You Want"
+        android:hint="e.g 5"
+        />
     <androidx.cardview.widget.CardView
         android:id="@+id/view2"
         android:layout_width="125dp"

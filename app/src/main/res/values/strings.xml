@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TestProject</string>
+    <string name="delete_task">Are you sure you want to delete the  %1$s task?</string>
 </resources>

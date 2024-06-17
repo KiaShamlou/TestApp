@@ -17,6 +17,10 @@ class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, 
         taskList.removeIf { it.title == task.title }
         notifyDataSetChanged()
     }
+    fun addTask(task : Task){
+        taskList.add(task)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         //here we indicate that this list should show list_item

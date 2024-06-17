@@ -5,40 +5,35 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testproject.MainActivity
 import com.example.testproject.R
 
-
-class TaskDialogActivity: AppCompatActivity() {
-
+class AddTaskDialogActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
-         super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
         this.setFinishOnTouchOutside(false);
-        setContentView(R.layout.task_dialog)
-        Log.d("TESTEST", "activity task onCreate")
-        val receivedTask: Task? = intent.getParcelableExtra("Task")
-        val button = findViewById<Button>(R.id.okButton)
-        val cancelButton = findViewById<Button>(R.id.exitButton)
-        val title = findViewById<TextView>(R.id.text_view_title_dialog)
-        if (receivedTask != null) {
-            title.text = resources.getString(R.string.delete_task, receivedTask.title)
-        }
-        button.setOnClickListener(){
-            if(receivedTask!=null) {
-                navigateToMainActivityNDelete(receivedTask)
-            }
+        setContentView(R.layout.add_task_activity)
+        val addButton = findViewById<Button>(R.id.addButton)
+        val cancelButton = findViewById<Button>(R.id.exitButtonDia)
+        val addDescEdit = findViewById<EditText>(R.id.edit_text_desc)
+        val addTitleEdit = findViewById<EditText>(R.id.textboxName)
+
+        addButton.setOnClickListener(){
+            val createdTask : Task =
+                Task(title = addTitleEdit.text.toString(), description = addDescEdit.text.toString(), imageId = R.drawable.fourth)
+            navigateToMainActivityNAdd(createdTask)
         }
         cancelButton.setOnClickListener(){
             navigateToMainActivity()
         }
     }
-
-    private fun navigateToMainActivityNDelete(task: Task){
+    private fun navigateToMainActivityNAdd(task: Task){
         var intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("DELETED_TASK",task)
+        intent.putExtra("ADDED_TASK",task)
         setResult(RESULT_OK,intent)
         finish()
     }

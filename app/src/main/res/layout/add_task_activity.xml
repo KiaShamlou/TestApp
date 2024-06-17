@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_task_view_title_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Whats the name of the Task ?"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:elevation="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        />
+    <EditText
+        android:id="@+id/textboxName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="@id/text_task_view_title_dialog"
+        app:layout_constraintTop_toBottomOf="@id/text_task_view_title_dialog"
+        android:layout_marginTop="5dp"
+        android:hint="Enter the Name"
+        android:layout_marginStart="32dp"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/des_task_view_title_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Whats the description ?"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:elevation="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textboxName"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        />
+    <EditText
+        android:id="@+id/edit_text_desc"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    app:layout_constraintStart_toStartOf="@id/text_task_view_title_dialog"
+    app:layout_constraintTop_toBottomOf="@id/des_task_view_title_dialog"
+    android:layout_marginTop="5dp"
+        android:layout_marginStart="32dp"
+    android:hint="Enter the Name"
+    app:boxCornerRadiusBottomEnd="5dp"
+    app:boxCornerRadiusBottomStart="5dp"
+    app:boxCornerRadiusTopEnd="5dp"
+    app:boxCornerRadiusTopStart="5dp"
+    />
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        android:text="Add"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="22dp"/>
+    <Button
+        android:id="@+id/exitButtonDia"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:elevation="2dp"
+        android:text="Cancel"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="22dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/exitButtonDia"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"/>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
