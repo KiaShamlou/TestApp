@@ -83,7 +83,6 @@ class MainActivity : AppCompatActivity() {
             if (addedTask != null) {
                 taskAdapter?.addTask(addedTask)
             }
-
         }
     }
     private fun navigateToAdddTaskActivity(){

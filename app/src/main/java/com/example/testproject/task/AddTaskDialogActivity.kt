@@ -16,6 +16,8 @@ class AddTaskDialogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setFinishOnTouchOutside(false);
+
+
         setContentView(R.layout.add_task_activity)
         val addButton = findViewById<Button>(R.id.addButton)
         val cancelButton = findViewById<Button>(R.id.exitButtonDia)
