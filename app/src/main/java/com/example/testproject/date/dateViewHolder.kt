@@ -53,7 +53,7 @@ class DateAdapter(val dateList: List<Date>, val onClick: (Date) -> Unit) :
 
             }
             itemView.setOnClickListener {
-//                onClick(date)
+                onClick(date)
                 val allUnselected = dateList.map {
                     it.isSelected = false
                     it

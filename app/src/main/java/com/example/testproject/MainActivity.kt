@@ -29,7 +29,7 @@ const val TASK_LIST = "TASK_LIST"
 
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
-    var tasksList : ArrayList<Task> = ArrayList()
+    var tasksList : ArrayList<Task> = ArrayList()//visible list
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,10 +87,9 @@ class MainActivity : AppCompatActivity() {
         Log.d("TESTEST", "activity main onPause")
     }
 
-    private fun navigateToDateActivity(dateName: Date) {
-        var intentt = Intent(this, DateActivity::class.java)
-        intentt.putExtra("DATE_NAME", dateName)
-        startActivity(intentt)
+    private fun showDateTasks(date: Date) {
+        //todo kianoosh change the visible task list to this
+//        tasksList = date.list
     }
 
     //delete
@@ -159,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             Date(date = 25, day = "tuesday"),
         )
         //NameAdapter adapter = new NameAdapter(namesList)
-        var adapter = DateAdapter(dateList, ::navigateToDateActivity)
+        var adapter = DateAdapter(dateList, ::showDateTasks)
         recyclerView.adapter = adapter
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

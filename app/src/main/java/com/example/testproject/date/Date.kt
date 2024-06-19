@@ -6,7 +6,8 @@ import com.example.testproject.task.Task
 data class Date(
     var day: String,
     var date: Int,
-    var isSelected : Boolean = false
+    var isSelected : Boolean = false,
+    //todo kianoosh add list of tasks
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
