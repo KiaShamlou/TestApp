@@ -1,5 +1,6 @@
 package com.example.testproject
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +19,9 @@ import com.example.testproject.task.TaskDialogActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-    var taskAdapter : TaskAdapter? = null
+    var taskAdapter: TaskAdapter? = null
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         showDatesList()
         showTasksList()
         var floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
-        floatingButton.setOnClickListener(){
+        floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
         }
     }
@@ -50,20 +53,23 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d("TESTEST", "activity main onDestroy")
     }
+
     override fun onPause() {
         super.onPause()
 
         Log.d("TESTEST", "activity main onPause")
     }
-    private fun navigateToDateActivity(dateName: Date){
+
+    private fun navigateToDateActivity(dateName: Date) {
         var intentt = Intent(this, DateActivity::class.java)
-        intentt.putExtra("DATE_NAME",dateName)
+        intentt.putExtra("DATE_NAME", dateName)
         startActivity(intentt)
     }
-    private fun navigateToTaskDialog(taskName: Task){
+
+    private fun navigateToTaskDialog(taskName: Task) {
         var intentt = Intent(this, TaskDialogActivity::class.java)
-        intentt.putExtra("Task",taskName)
-        startActivityForResult(intentt,101)
+        intentt.putExtra("Task", taskName)
+        startActivityForResult(intentt, 101)
 
     }
 
@@ -72,29 +78,48 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 101 && resultCode == RESULT_OK) {
             val deletedTask = data?.getParcelableExtra<Task>("DELETED_TASK")
             // Update UI or perform actions with the received dataString
-            Toast.makeText(this , deletedTask?.title ,Toast.LENGTH_LONG).show()
-            if(deletedTask != null){
+            Toast.makeText(this, deletedTask?.title, Toast.LENGTH_LONG).show()
+            if (deletedTask != null) {
                 taskAdapter?.deleteTask(deletedTask)
             }
         }
 
-        if(requestCode == 103 && resultCode == RESULT_OK) {
+        if (requestCode == 103 && resultCode == RESULT_OK) {
             val addedTask = data?.getParcelableExtra<Task>("ADDED_TASK")
             if (addedTask != null) {
                 taskAdapter?.addTask(addedTask)
             }
+        }
 
+        if (requestCode == 104 && resultCode == RESULT_OK) {
+            val editedTask = data?.getParcelableExtra<Task>("EDITED_TASK")
+            val firstTask = data?.getParcelableExtra<Task>("FIRST_TASK")
+            val position = data?.getIntExtra("POSITION", 0)
+            if (editedTask != null && position != null) {
+                taskAdapter?.editTask(firstTask, editedTask, position)
+
+            }
         }
     }
-    private fun navigateToAdddTaskActivity(){
+
+    private fun navigateToAdddTaskActivity() {
         var intent = Intent(this, AddTaskDialogActivity::class.java)
-        startActivityForResult(intent,103)
+        startActivityForResult(intent, 103)
     }
-    private fun navigateToTaskActivity(taskName: Task){
+
+    private fun navigateToEditTaskActivity(task: Task, position: Int) {
+        var intent = Intent(this, AddTaskDialogActivity::class.java)
+        intent.putExtra("TASK_NAME", task)
+        intent.putExtra("POSITION", position)
+        startActivityForResult(intent, 104)
+    }
+
+    private fun navigateToTaskActivity(taskName: Task) {
         var intent = Intent(this, TaskActivity::class.java)
         intent.putExtra("TASK_NAME", taskName)
         startActivity(intent)
     }
+
     private fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
         var dateList = listOf(
@@ -108,22 +133,31 @@ class MainActivity : AppCompatActivity() {
         //NameAdapter adapter = new NameAdapter(namesList)
         var adapter = DateAdapter(dateList, ::navigateToDateActivity)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
     }
+
     var tasksList = mutableListOf(
         Task(title = "Idea", description = "This is an idea", imageId = R.drawable.first),
         Task(title = "Food", description = "This is a food", imageId = R.drawable.second),
         Task(title = "Work", description = "This is a work", imageId = R.drawable.third),
         Task(title = "Sport", description = "This is a sport", imageId = R.drawable.fourth),
     )
+
     fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
 
         //NameAdapter adapter = new NameAdapter(namesList)
-        taskAdapter = TaskAdapter(tasksList, ::navigateToTaskActivity , ::navigateToTaskDialog)
+        taskAdapter = TaskAdapter(
+            tasksList,
+            ::navigateToTaskActivity,
+            ::navigateToTaskDialog,
+            ::navigateToEditTaskActivity
+        )
         recyclerView2.adapter = taskAdapter
         recyclerView2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
     }
 
 }

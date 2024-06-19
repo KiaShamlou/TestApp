@@ -3,13 +3,14 @@ package com.example.testproject.task
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
 
-class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, val onLongClick: (Task) -> Unit) :
+class TaskAdapter(var taskList: MutableList<Task>, val onClick: (Task) -> Unit, val onLongClick: (Task) -> Unit, val onClickEdit: (Task, Int) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
 
@@ -19,6 +20,10 @@ class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, 
     }
     fun addTask(task : Task){
         taskList.add(task)
+        notifyDataSetChanged()
+    }
+    fun editTask(firstTask : Task?,editedTask: Task,position: Int){
+        taskList[position] = editedTask
         notifyDataSetChanged()
     }
 
@@ -42,6 +47,7 @@ class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, 
         val taskImageView: ImageView = itemView.findViewById(R.id.image_view_task)
         var titleTextView = itemView.findViewById<MaterialTextView>(R.id.text_view_title)
         var descriptionTextView = itemView.findViewById<MaterialTextView>(R.id.text_view_description)
+        var kebabBo = itemView.findViewById<Button>(R.id.button_kebab)
 
         fun bind(task: Task, position: Int) {
             taskImageView.setBackgroundResource(task.imageId)
@@ -56,8 +62,14 @@ class TaskAdapter(val taskList: MutableList<Task>, val onClick: (Task) -> Unit, 
                 onLongClick(task)
                 true
             }
+            kebabBo.setOnClickListener(){
+                onClickEdit(task,position)
+
+            }
+
 
         }
+
 
     }
 }
