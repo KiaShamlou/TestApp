@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.testproject.DELETED_TASK
 import com.example.testproject.MainActivity
 import com.example.testproject.R
 
@@ -38,7 +39,7 @@ class TaskDialogActivity: AppCompatActivity() {
 
     private fun navigateToMainActivityNDelete(task: Task){
         var intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("DELETED_TASK",task)
+        intent.putExtra(DELETED_TASK,task)
         setResult(RESULT_OK,intent)
         finish()
     }

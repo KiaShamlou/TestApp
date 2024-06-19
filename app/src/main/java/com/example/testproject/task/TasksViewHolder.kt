@@ -11,20 +11,34 @@ import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
 
-class TaskAdapter(var taskList: MutableList<Task>, val onClick: (Task) -> Unit, val onLongClick: (Task) -> Unit, val onClickEdit: (Task, Int) -> Unit) :
+class TaskAdapter(
+    var taskList: MutableList<Task>,
+    val onClick: (Task) -> Unit,
+    val onLongClick: (Task) -> Unit,
+    val onClickEdit: (Task, Int) -> Unit,
+    val persistList: (List<Task>) -> Unit
+) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
 
     fun deleteTask(task: Task) {
         taskList.removeIf { it.title == task.title }
-        notifyDataSetChanged()
+        dataChanged()
     }
-    fun addTask(task : Task){
+
+    fun addTask(task: Task) {
         taskList.add(task)
-        notifyDataSetChanged()
+        dataChanged()
     }
-    fun editTask(firstTask : Task?,editedTask: Task,position: Int){
+
+    fun editTask(firstTask: Task?, editedTask: Task, position: Int) {
         taskList[position] = editedTask
+        dataChanged()
+    }
+
+    fun dataChanged() {
+        //save data to shared pref
+        persistList(taskList)
         notifyDataSetChanged()
     }
 
@@ -69,8 +83,8 @@ class TaskAdapter(var taskList: MutableList<Task>, val onClick: (Task) -> Unit, 
                 onLongClick(task)
                 true
             }
-            kebabBo.setOnClickListener(){
-                onClickEdit(task,position)
+            kebabBo.setOnClickListener() {
+                onClickEdit(task, position)
 
             }
 

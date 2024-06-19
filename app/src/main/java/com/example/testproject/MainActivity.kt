@@ -1,6 +1,7 @@
 package com.example.testproject
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,20 +18,46 @@ import com.example.testproject.task.TaskActivity
 import com.example.testproject.task.TaskAdapter
 import com.example.testproject.task.TaskDialogActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textview.MaterialTextView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+const val DELETED_TASK = "DELETED_TASK"
+const val SHARED_PREF_NAME = "SHARED_PREF_NAME"
+const val VISIT_COUNT = "VISIT_COUNT"
+const val TASK_LIST = "TASK_LIST"
 
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
-
+    var tasksList : ArrayList<Task> = ArrayList()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d("TESTEST", "activity main onCreate")
+
+        tasksList = getArrayListFromPersistance()
         showDatesList()
         showTasksList()
-        var floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
+        handleVisitCount()
+        handleFab()
+    }
+
+    private fun handleFab(){
+        val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
         floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
+        }
+    }
+    private fun handleVisitCount() {
+        val textViewAppOpenCount = findViewById<MaterialTextView>(R.id.text_view_app_open_count)
+        val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        var lastVisit = sharedPref.getInt(VISIT_COUNT, 0)
+        lastVisit++
+        textViewAppOpenCount.text = lastVisit.toString()
+        with(sharedPref.edit()) {
+            putInt(VISIT_COUNT, lastVisit)
+            apply()
         }
     }
 
@@ -66,9 +93,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(intentt)
     }
 
-    private fun navigateToTaskDialog(taskName: Task) {
+    //delete
+    private fun navigateToTaskDialog(task: Task) {
         var intentt = Intent(this, TaskDialogActivity::class.java)
-        intentt.putExtra("Task", taskName)
+        intentt.putExtra("Task", task)
         startActivityForResult(intentt, 101)
 
     }
@@ -76,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 101 && resultCode == RESULT_OK) {
-            val deletedTask = data?.getParcelableExtra<Task>("DELETED_TASK")
+            val deletedTask = data?.getParcelableExtra<Task>(DELETED_TASK)
             // Update UI or perform actions with the received dataString
             Toast.makeText(this, deletedTask?.title, Toast.LENGTH_LONG).show()
             if (deletedTask != null) {
@@ -138,12 +166,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    var tasksList = mutableListOf(
-        Task(title = "Idea", description = "This is an idea", imageId = R.drawable.first),
-        Task(title = "Food", description = "This is a food", imageId = R.drawable.second),
-        Task(title = "Work", description = "This is a work", imageId = R.drawable.third),
-        Task(title = "Sport", description = "This is a sport", imageId = R.drawable.fourth),
-    )
+
 
     fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
@@ -153,11 +176,29 @@ class MainActivity : AppCompatActivity() {
             tasksList,
             ::navigateToTaskActivity,
             ::navigateToTaskDialog,
-            ::navigateToEditTaskActivity
+            ::navigateToEditTaskActivity,
+            ::persistList
         )
         recyclerView2.adapter = taskAdapter
         recyclerView2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
     }
 
+    private fun persistList(list: List<Task>) {
+        val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val gson = Gson()
+        val jsonList = gson.toJson(list)
+        with(sharedPref.edit()) {
+            putString(TASK_LIST, jsonList)
+            apply()
+        }
+    }
+
+    fun getArrayListFromPersistance(): ArrayList<Task> {
+        val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPref.getString(TASK_LIST, "")
+        val type = object : TypeToken<ArrayList<Task>>() {}.type
+        return gson.fromJson(json, type) ?: ArrayList()
+    }
 }
