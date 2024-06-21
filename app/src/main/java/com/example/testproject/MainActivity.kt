@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDateTasks(date: Date) {
         //todo kianoosh change the visible task list to this
-//        tasksList = date.list
+        tasksList = date.dateTasksList
     }
 
     //delete
@@ -184,6 +184,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun persistList(list: List<Task>) {
+
         val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val gson = Gson()
         val jsonList = gson.toJson(list)
