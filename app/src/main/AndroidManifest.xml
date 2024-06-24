@@ -24,12 +24,16 @@
         </activity>
         <activity android:name=".task.TaskActivity" ></activity>
         <activity android:name=".date.DateActivity"/>
+        <activity android:name=".date.DateAddActivity"/>
         <activity android:name=".task.TaskDialogActivity"
             android:theme="@style/Theme.App.Dialog.NoTitle"
             android:excludeFromRecents="true" />
         <activity android:name=".task.AddTaskDialogActivity"
-        android:theme="@style/Theme.App.Dialog.NoTitle"
-        android:excludeFromRecents="true" />
+            android:theme="@style/Theme.App.Dialog.NoTitle"
+            android:excludeFromRecents="true" />
+        <activity android:name=".date.AddDateDialogActivity"
+            android:theme="@style/Theme.App.Dialog.NoTitle"
+            android:excludeFromRecents="true" />
     </application>
 
 </manifest>

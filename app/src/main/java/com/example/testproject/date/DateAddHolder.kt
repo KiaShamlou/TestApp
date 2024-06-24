@@ -1,5 +1,6 @@
 package com.example.testproject.date
 
+import android.app.backup.BackupManager.dataChanged
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,22 +10,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 import com.example.testproject.task.Task
 import com.google.android.material.textview.MaterialTextView
+class DateAddAdapter(
+    var dateList: MutableList<Date>,
+    val updatedData : (List<Date>) -> Unit
+) :
+    RecyclerView.Adapter<DateAddAdapter.DateViewHolder>(){
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DateAddAdapter.DateViewHolder {
+    //here we indicate that this list should show list_item
 
+    val view = LayoutInflater.from(parent.context)
+        .inflate(R.layout.date_item_add, parent, false)
+    return DateViewHolder(view)
+}
 
-class DateAdapter(var dateList: List<Date>, val onClick: (Date) -> Unit) :
-    RecyclerView.Adapter<DateAdapter.DateViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DateViewHolder {
-        //here we indicate that this list should show list_item
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.date_item, parent, false)
-        return DateViewHolder(view)
+    fun addDate(date: Date) {
+        dateList.add(date)
+        dataChanged()
     }
-    fun updateList(recievedList : ArrayList<Date>){
-        dateList = recievedList
+    fun dataChanged() {
+        updatedData(dateList)
         notifyDataSetChanged()
     }
-
-
 
     override fun getItemCount(): Int {
         return dateList.size
@@ -43,32 +49,23 @@ class DateAdapter(var dateList: List<Date>, val onClick: (Date) -> Unit) :
             dateTextView.text = date.date.toString()
             dayTextView.text = date.day
             if(date.isSelected){
-                backgroundCardView.setCardBackgroundColor(ContextCompat.getColor(itemView.context,
+                backgroundCardView.setCardBackgroundColor(
+                    ContextCompat.getColor(itemView.context,
                     R.color.purple
                 ))
                 dateTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
                 dayTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
             }else{
-                backgroundCardView.setCardBackgroundColor(ContextCompat.getColor(itemView.context,
+                backgroundCardView.setCardBackgroundColor(
+                    ContextCompat.getColor(itemView.context,
                     R.color.white
                 ))
                 dateTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
                 dayTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
 
             }
-            itemView.setOnClickListener {
-                onClick(date)
-                val allUnselected = dateList.map {
-                    it.isSelected = false
-                    it
-
-
-                }
-                allUnselected[position].isSelected = true
-                notifyDataSetChanged()
-            }
         }
 
     }
-}
 
+}

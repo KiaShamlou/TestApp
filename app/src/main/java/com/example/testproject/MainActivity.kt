@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.date.Date
 import com.example.testproject.date.DateActivity
 import com.example.testproject.date.DateAdapter
+import com.example.testproject.date.DateAddActivity
 import com.example.testproject.task.AddTaskDialogActivity
 import com.example.testproject.task.Task
 import com.example.testproject.task.TaskActivity
@@ -29,6 +32,7 @@ const val TASK_LIST = "TASK_LIST"
 
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
+    var dateAdapter : DateAdapter? = null
     var tasksList : ArrayList<Task> = ArrayList()//visible list
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,10 +47,16 @@ class MainActivity : AppCompatActivity() {
         handleFab()
     }
 
-    private fun handleFab(){
+    fun handleFab(){
         val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
         floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
+        }
+    }
+    fun dateHandle(dateListt : List<Date>){
+        val callenderImage = findViewById<ImageView>(R.id.callender_imageView)
+        callenderImage.setOnClickListener(){
+            navigateToDateAddActivity(dateListt)
         }
     }
     private fun handleVisitCount() {
@@ -99,6 +109,16 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intentt, 101)
 
     }
+    private fun navigateToDateAddActivity(dateList : List<Date>) {
+        val newList = ArrayList<Date>()
+        dateList.forEach {
+            newList.add(it)
+        }
+        var intentt = Intent(this, DateAddActivity::class.java)
+        intentt.putParcelableArrayListExtra("dateList" , newList)
+        startActivityForResult(intentt, 105)
+
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -127,6 +147,16 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+        if (requestCode == 105 && resultCode == RESULT_OK){
+            val recievedDateList = arrayListOf<Date>()
+            intent.getParcelableArrayListExtra<Date>("DATE_LIST")?.forEach {
+                recievedDateList.add(it)
+            }
+
+            dateAdapter?.updateList(recievedDateList)
+        }
+
+
     }
 
     private fun navigateToAdddTaskActivity() {
@@ -147,19 +177,20 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun showDatesList() {
+    fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
-        var dateList = listOf(
-            Date(date = 20, day = "Tuesday"),
-            Date(date = 21, day = "Wednesday"),
-            Date(date = 22, day = "Thursday"),
-            Date(date = 23, day = "tuesday"),
-            Date(date = 24, day = "tuesday"),
-            Date(date = 25, day = "tuesday"),
+        val dateList = listOf(
+            Date(date = "20", day = "Tuesday"),
+            Date(date = "21", day = "Wednesday"),
+            Date(date = "22", day = "Thursday"),
+            Date(date = "23", day = "tuesday"),
+            Date(date = "24", day = "tuesday"),
+            Date(date = "25", day = "tuesday"),
         )
+        dateHandle(dateList)
         //NameAdapter adapter = new NameAdapter(namesList)
-        var adapter = DateAdapter(dateList, ::showDateTasks)
-        recyclerView.adapter = adapter
+        dateAdapter = DateAdapter(dateList, ::showDateTasks)
+        recyclerView.adapter = dateAdapter
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
