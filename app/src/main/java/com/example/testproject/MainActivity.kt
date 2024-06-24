@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
         }
         if (requestCode == 105 && resultCode == RESULT_OK){
             val recievedDateList = arrayListOf<Date>()
-            intent.getParcelableArrayListExtra<Date>("DATE_LIST")?.forEach {
+            data?.getParcelableArrayListExtra<Date>("DATE_LIST")?.forEach {
                 recievedDateList.add(it)
             }
 

@@ -24,9 +24,7 @@ class DateAddActivity : AppCompatActivity() {
             navigateToDateAdd()
         }
 
-        if (recievedDateList != null) {
-            showDatesList(recievedDateList.toMutableList())
-        }
+        showDatesList(recievedDateList.toMutableList())
     }
 
     fun navigateToDateAdd() {
@@ -62,9 +60,8 @@ class DateAddActivity : AppCompatActivity() {
         list.forEach {
             newList.add(it)
         }
-        val bundle = Bundle()
         intent.putParcelableArrayListExtra("DATE_LIST" , newList)
         setResult(RESULT_OK, intent)
-        finish()
+//        finish()
     }
 }
