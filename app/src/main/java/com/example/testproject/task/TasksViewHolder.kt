@@ -15,8 +15,7 @@ class TaskAdapter(
     var taskList: MutableList<Task>,
     val onClick: (Task) -> Unit,
     val onLongClick: (Task) -> Unit,
-    val onClickEdit: (Task, Int) -> Unit,
-    val persistList: (List<Task>) -> Unit
+    val onClickEdit: (Task, Int) -> Unit
 ) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
@@ -26,6 +25,10 @@ class TaskAdapter(
         dataChanged()
     }
 
+    fun addAll(all: ArrayList<Task>){
+        taskList = all
+        dataChanged()
+    }
     fun addTask(task: Task) {
         taskList.add(task)
         dataChanged()
@@ -37,8 +40,6 @@ class TaskAdapter(
     }
 
     fun dataChanged() {
-        //save data to shared pref
-        persistList(taskList)
         notifyDataSetChanged()
     }
 
