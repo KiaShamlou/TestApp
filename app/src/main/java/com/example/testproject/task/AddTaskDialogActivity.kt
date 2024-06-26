@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import com.example.testproject.MainActivity
 import com.example.testproject.R
 
@@ -20,11 +21,13 @@ class AddTaskDialogActivity : AppCompatActivity() {
         val receivedPos: Int = intent.getIntExtra("POSITION", 0)
 
         val addButton = findViewById<Button>(R.id.addButton)
+        addButton.isEnabled = false
         val cancelButton = findViewById<Button>(R.id.exitButtonDia)
         val addDescEdit = findViewById<EditText>(R.id.edit_text_desc)
         val addTitleEdit = findViewById<EditText>(R.id.textboxName)
 
         if (receivedTask == null) {
+            addButton.isEnabled = true
             Toast.makeText(this, "ya ali", Toast.LENGTH_LONG).show()
             addButton.setOnClickListener() {
                 val createdTask: Task =
@@ -39,18 +42,20 @@ class AddTaskDialogActivity : AppCompatActivity() {
                 navigateToMainActivity()
             }
         } else {
+            addTitleEdit.setText(receivedTask.title.toString())
+            addTitleEdit.addTextChangedListener() {
+                addButton.isEnabled = addTitleEdit.text.toString() != receivedTask?.title.toString()
+            }
             addButton.setOnClickListener() {
-                if (receivedTask != null) {
-                    val EditedTask: Task = Task(
-                        title = addTitleEdit.text.toString(),
-                        description = addDescEdit.text.toString(),
-                        imageId = R.drawable.fourth
-                    )
-                    navigateToMainActivityEdit(receivedTask, EditedTask, receivedPos)
-                }
-                cancelButton.setOnClickListener() {
-                    navigateToMainActivity()
-                }
+                val EditedTask: Task = Task(
+                    title = addTitleEdit.text.toString(),
+                    description = addDescEdit.text.toString(),
+                    imageId = R.drawable.fourth
+                )
+                navigateToMainActivityEdit(receivedTask, EditedTask, receivedPos)
+            }
+            cancelButton.setOnClickListener() {
+                navigateToMainActivity()
             }
         }
     }

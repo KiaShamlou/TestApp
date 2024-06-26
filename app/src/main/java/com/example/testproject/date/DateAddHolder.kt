@@ -48,22 +48,7 @@ class DateAddAdapter(
 
             dateTextView.text = date.date.toString()
             dayTextView.text = date.day
-            if(date.isSelected){
-                backgroundCardView.setCardBackgroundColor(
-                    ContextCompat.getColor(itemView.context,
-                    R.color.purple
-                ))
-                dateTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                dayTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-            }else{
-                backgroundCardView.setCardBackgroundColor(
-                    ContextCompat.getColor(itemView.context,
-                    R.color.white
-                ))
-                dateTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
-                dayTextView.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
 
-            }
         }
 
     }

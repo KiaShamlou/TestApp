@@ -33,30 +33,28 @@ const val TASK_LIST = "TASK_LIST"
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
     var dateAdapter : DateAdapter? = null
+    var dateList : List<Date> = ArrayList()
     var tasksList : ArrayList<Task> = ArrayList()//visible list
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d("TESTEST", "activity main onCreate")
-
         tasksList = getArrayListFromPersistance()
         showDatesList()
         showTasksList()
         handleVisitCount()
         handleFab()
+        val callenderImage = findViewById<ImageView>(R.id.callender_imageView)
+        callenderImage.setOnClickListener(){
+            navigateToDateAddActivity(dateList)
+        }
     }
 
     fun handleFab(){
         val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
         floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
-        }
-    }
-    fun dateHandle(dateListt : List<Date>){
-        val callenderImage = findViewById<ImageView>(R.id.callender_imageView)
-        callenderImage.setOnClickListener(){
-            navigateToDateAddActivity(dateListt)
         }
     }
     private fun handleVisitCount() {
@@ -152,8 +150,8 @@ class MainActivity : AppCompatActivity() {
             data?.getParcelableArrayListExtra<Date>("DATE_LIST")?.forEach {
                 recievedDateList.add(it)
             }
-
             dateAdapter?.updateList(recievedDateList)
+            dateList = recievedDateList
         }
 
 
@@ -179,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
-        val dateList = listOf(
+        dateList = listOf(
             Date(date = "20", day = "Tuesday"),
             Date(date = "21", day = "Wednesday"),
             Date(date = "22", day = "Thursday"),
@@ -187,7 +185,6 @@ class MainActivity : AppCompatActivity() {
             Date(date = "24", day = "tuesday"),
             Date(date = "25", day = "tuesday"),
         )
-        dateHandle(dateList)
         //NameAdapter adapter = new NameAdapter(namesList)
         dateAdapter = DateAdapter(dateList, ::showDateTasks)
         recyclerView.adapter = dateAdapter

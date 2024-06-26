@@ -23,7 +23,6 @@ class DateAddActivity : AppCompatActivity() {
         button.setOnClickListener() {
             navigateToDateAdd()
         }
-
         showDatesList(recievedDateList.toMutableList())
     }
 
