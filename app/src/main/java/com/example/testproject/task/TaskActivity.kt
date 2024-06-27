@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.testproject.R
 import com.google.android.material.textview.MaterialTextView
 
-
-//todo Kia android OS knows what activities are
 class TaskActivity : AppCompatActivity() {
 
     //receive a Task in here and show the name of task and description

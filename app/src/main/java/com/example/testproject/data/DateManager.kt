@@ -1,7 +1,15 @@
 package com.example.testproject.data
 
+import android.content.Context
+import com.example.testproject.SHARED_PREF_NAME
+import com.example.testproject.TASK_LIST
 import com.example.testproject.date.Date
 import com.example.testproject.task.Task
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+const val SHARED_PREF_NAME = "SHARED_PREF_NAME"
+const val DATE_LIST = "DATE_LIST"
 
 class DateManager {
 
@@ -28,5 +36,8 @@ class DateManager {
     }
     fun dateListAdded(list : List<Date>){
         dateList = list
+        dateList[0].isSelected = true
     }
+
+
 }

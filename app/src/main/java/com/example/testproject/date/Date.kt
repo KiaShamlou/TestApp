@@ -11,5 +11,4 @@ data class Date(
     var date: String,
     var isSelected : Boolean = false,
     var dateTasksList : ArrayList<Task> = arrayListOf()
-    //todo kianoosh add list of tasks
 ): Parcelable

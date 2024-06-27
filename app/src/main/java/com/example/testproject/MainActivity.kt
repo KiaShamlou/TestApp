@@ -4,16 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.data.DateManager
 import com.example.testproject.date.Date
-import com.example.testproject.date.DateActivity
 import com.example.testproject.date.DateAdapter
 import com.example.testproject.date.DateAddActivity
 import com.example.testproject.task.AddTaskDialogActivity
@@ -29,34 +27,40 @@ import com.google.gson.reflect.TypeToken
 const val DELETED_TASK = "DELETED_TASK"
 const val SHARED_PREF_NAME = "SHARED_PREF_NAME"
 const val VISIT_COUNT = "VISIT_COUNT"
+const val DATE_LIST = "DATE_LIST"
 const val TASK_LIST = "TASK_LIST"
 
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
-    var dateAdapter : DateAdapter? = null
+    var dateAdapter: DateAdapter? = null
+
     //single source of truth
     var dateManager = DateManager()
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dateManager.dateList = getDateListFromPersistance()
         Log.d("TESTEST", "activity main onCreate")
         showDatesList()
         showTasksList()
         handleVisitCount()
         handleFab()
         val callenderImage = findViewById<ImageView>(R.id.callender_imageView)
-        callenderImage.setOnClickListener(){
+        callenderImage.setOnClickListener() {
             navigateToDateAddActivity(dateManager.dateList)
         }
     }
 
-    fun handleFab(){
+    fun handleFab() {
         val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
+        floatingButton.isVisible = dateManager.dateList.isNotEmpty()
         floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
         }
     }
+
     private fun handleVisitCount() {
         val textViewAppOpenCount = findViewById<MaterialTextView>(R.id.text_view_app_open_count)
         val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
@@ -106,19 +110,21 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intentt, 101)
 
     }
-    private fun navigateToDateAddActivity(dateList : List<Date>) {
+
+    private fun navigateToDateAddActivity(dateList: List<Date>) {
         val newList = ArrayList<Date>()
         dateList.forEach {
             newList.add(it)
         }
         var intentt = Intent(this, DateAddActivity::class.java)
-        intentt.putParcelableArrayListExtra("dateList" , newList)
+        intentt.putParcelableArrayListExtra("dateList", newList)
         startActivityForResult(intentt, 105)
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        handleFab()
         if (requestCode == 101 && resultCode == RESULT_OK) {
             val deletedTask = data?.getParcelableExtra<Task>(DELETED_TASK)
             // Update UI or perform actions with the received dataString
@@ -129,7 +135,6 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == 103 && resultCode == RESULT_OK) {
             val addedTask = data?.getParcelableExtra<Task>("ADDED_TASK")
-            //todo keivan
             dateManager.taskAdded(addedTask)
             taskAdapter?.addAll(dateManager.getCurrentTaskList())
         }
@@ -142,13 +147,15 @@ class MainActivity : AppCompatActivity() {
                 taskAdapter?.addAll(dateManager.getCurrentTaskList())
             }
         }
-        if (requestCode == 105 && resultCode == RESULT_OK){
+        if (requestCode == 105 && resultCode == RESULT_OK) {
             val recievedDateList = arrayListOf<Date>()
             data?.getParcelableArrayListExtra<Date>("DATE_LIST")?.forEach {
                 recievedDateList.add(it)
             }
             dateAdapter?.updateList(recievedDateList)
             dateManager.dateListAdded(recievedDateList)
+            persistDateList(recievedDateList)
+            handleFab()
         }
     }
 
@@ -169,6 +176,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("TASK_NAME", taskName)
         startActivity(intent)
     }
+
     fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
         //NameAdapter adapter = new NameAdapter(namesList)
@@ -180,7 +188,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
 
@@ -190,29 +197,47 @@ class MainActivity : AppCompatActivity() {
             ::navigateToTaskActivity,
             ::navigateToTaskDialog,
             ::navigateToEditTaskActivity
-            )
+        )
         recyclerView2.adapter = taskAdapter
         recyclerView2.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
     }
 
 
-    private fun persistList(list: List<Task>) {
-
+    //    private fun persistList(list: List<Task>) {
+//
+//        val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+//        val gson = Gson()
+//        val jsonList = gson.toJson(list)
+//        with(sharedPref.edit()) {
+//            putString(TASK_LIST, jsonList)
+//            apply()
+//        }
+//    }
+//
+//    fun getArrayListFromPersistance(): ArrayList<Task> {
+//        val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+//        val gson = Gson()
+//        val json = sharedPref.getString(TASK_LIST, "")
+//        val type = object : TypeToken<ArrayList<Task>>() {}.type
+//        return gson.fromJson(json, type) ?: ArrayList()
+//    }
+//
+    fun persistDateList(list: List<Date>) {
         val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val gson = Gson()
         val jsonList = gson.toJson(list)
         with(sharedPref.edit()) {
-            putString(TASK_LIST, jsonList)
+            putString(com.example.testproject.DATE_LIST, jsonList)
             apply()
         }
     }
 
-    fun getArrayListFromPersistance(): ArrayList<Task> {
+    fun getDateListFromPersistance(): ArrayList<Date> {
         val sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val gson = Gson()
-        val json = sharedPref.getString(TASK_LIST, "")
-        val type = object : TypeToken<ArrayList<Task>>() {}.type
+        val json = sharedPref.getString(DATE_LIST, "")
+        val type = object : TypeToken<ArrayList<Date>>() {}.type
         return gson.fromJson(json, type) ?: ArrayList()
     }
 }
