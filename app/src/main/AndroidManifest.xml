@@ -34,6 +34,7 @@
         <activity android:name=".date.AddDateDialogActivity"
             android:theme="@style/Theme.App.Dialog.NoTitle"
             android:excludeFromRecents="true" />
+        <activity android:name=".SearchActivity"/>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,28 +35,41 @@ class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
     var dateAdapter: DateAdapter? = null
 
-    //single source of truth
-    var dateManager = DateManager()
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        dateManager.init(getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE))
+        DateManager.init(getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE))
         Log.d("TESTEST", "activity main onCreate")
         showDatesList()
         showTasksList()
         handleVisitCount()
         handleFab()
         val callenderImage = findViewById<ImageView>(R.id.callender_imageView)
+        val searchImage = findViewById<ImageView>(R.id.search_icon)
         callenderImage.setOnClickListener() {
-            navigateToDateAddActivity(dateManager.getDates())
+            navigateToDateAddActivity(DateManager.getDates())
         }
+        searchImage.setOnClickListener(){
+            navigateToSearchActivity()
+        }
+//        searchImage.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextChange(newText: String): Boolean {
+//
+//                return true
+//            }
+//
+//            override fun onQueryTextSubmit(query: String): Boolean {
+//                return true
+//            }
+
+//        })
+
     }
 
     fun handleFab() {
         val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
-        floatingButton.isVisible = dateManager.isDatesEmpty().not()
+        floatingButton.isVisible = DateManager.isDatesEmpty().not()
         floatingButton.setOnClickListener() {
             navigateToAdddTaskActivity()
         }
@@ -122,29 +136,35 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun navigateToSearchActivity() {
+        var intentt = Intent(this, SearchActivity::class.java)
+//        intentt.putParcelableArrayListExtra("dateList", newList)
+        startActivityForResult(intentt, 107)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         handleFab()
         if (requestCode == 101 && resultCode == RESULT_OK) {
             val deletedTask = data?.getParcelableExtra<Task>(DELETED_TASK)
             // Update UI or perform actions with the received dataString
-            dateManager.taskDeleted(deletedTask)
-            taskAdapter?.addAll(dateManager.getCurrentTaskList())
+            DateManager.taskDeleted(deletedTask)
+            taskAdapter?.addAll(DateManager.getCurrentTaskList())
 
         }
 
         if (requestCode == 103 && resultCode == RESULT_OK) {
             val addedTask = data?.getParcelableExtra<Task>("ADDED_TASK")
-            dateManager.taskAdded(addedTask)
-            taskAdapter?.addAll(dateManager.getCurrentTaskList())
+            DateManager.taskAdded(addedTask)
+            taskAdapter?.addAll(DateManager.getCurrentTaskList())
         }
 
         if (requestCode == 104 && resultCode == RESULT_OK) {
             val editedTask = data?.getParcelableExtra<Task>("EDITED_TASK")
             val position = data?.getIntExtra("POSITION", 0)
             if (editedTask != null && position != null) {
-                dateManager.taskEdited(editedTask, position)
-                taskAdapter?.addAll(dateManager.getCurrentTaskList())
+                DateManager.taskEdited(editedTask, position)
+                taskAdapter?.addAll(DateManager.getCurrentTaskList())
             }
         }
         if (requestCode == 105 && resultCode == RESULT_OK) {
@@ -153,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                 recievedDateList.add(it)
             }
             dateAdapter?.updateList(recievedDateList)
-            dateManager.dateListAdded(recievedDateList)
+            DateManager.dateListAdded(recievedDateList)
             persistDateList(recievedDateList)
             handleFab()
         }
@@ -180,12 +200,20 @@ class MainActivity : AppCompatActivity() {
     fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
         //NameAdapter adapter = new NameAdapter(namesList)
-        dateAdapter = DateAdapter(dateManager.getDates(), ::showDateTasks)
+        dateAdapter = DateAdapter(DateManager.getDates(), ::showDateTasks)
         recyclerView.adapter = dateAdapter
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
     }
+//    fun showSearchResult() {
+//        var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view3)
+//        dateAdapter = DateAdapter(DateManager.dateList, ::showDateTasks)
+//        recyclerView.adapter = dateAdapter
+//        recyclerView.layoutManager =
+//            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+//
+//    }
 
 
     fun showTasksList() {
@@ -193,7 +221,7 @@ class MainActivity : AppCompatActivity() {
 
         //NameAdapter adapter = new NameAdapter(namesList)
         taskAdapter = TaskAdapter(
-            dateManager.getCurrentTaskList(),
+            DateManager.getCurrentTaskList(),
             ::navigateToTaskActivity,
             ::navigateToTaskDialog,
             ::navigateToEditTaskActivity

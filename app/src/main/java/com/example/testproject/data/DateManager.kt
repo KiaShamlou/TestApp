@@ -8,9 +8,7 @@ import com.example.testproject.date.Date
 import com.example.testproject.task.Task
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-
-class DateManager(
-) {
+ object DateManager {
     private var sharedPreferences: SharedPreferences? = null
     private var dateList : List<Date> = ArrayList()
 
