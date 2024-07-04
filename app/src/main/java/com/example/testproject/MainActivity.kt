@@ -1,5 +1,8 @@
 package com.example.testproject
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -39,6 +42,12 @@ const val VISIT_COUNT = "VISIT_COUNT"
 const val DATE_LIST = "DATE_LIST"
 const val TASK_LIST = "TASK_LIST"
 
+private val readExternal=READ_EXTERNAL_STORAGE
+private val readVideo=READ_MEDIA_VIDEO
+private val readImages=READ_MEDIA_IMAGES
+private val permissions= arrayOf(
+    readVideo,readImages
+)
 class MainActivity : AppCompatActivity() {
     var taskAdapter: TaskAdapter? = null
     var dateAdapter: DateAdapter? = null
