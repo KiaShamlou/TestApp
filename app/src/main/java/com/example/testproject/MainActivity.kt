@@ -3,11 +3,19 @@ package com.example.testproject
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,6 +61,8 @@ class MainActivity : AppCompatActivity() {
         searchImage.setOnClickListener(){
             navigateToSearchActivity()
         }
+
+
 //        searchImage.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 //            override fun onQueryTextChange(newText: String): Boolean {
 //
@@ -66,6 +76,16 @@ class MainActivity : AppCompatActivity() {
 //        })
 
     }
+    private fun launchNewPhotoPicker(){
+        newPhotoPiker.launch("image/*")
+    }
+
+    // get the result
+    val newPhotoPiker=registerForActivityResult(ActivityResultContracts.GetContent()){ uri ->
+// set Uri from Image view
+
+
+    }
 
     fun handleFab() {
         val floatingButton = findViewById<FloatingActionButton>(R.id.floatingActionBut)
@@ -74,6 +94,8 @@ class MainActivity : AppCompatActivity() {
             navigateToAdddTaskActivity()
         }
     }
+
+
 
     private fun handleVisitCount() {
         val textViewAppOpenCount = findViewById<MaterialTextView>(R.id.text_view_app_open_count)
@@ -177,6 +199,7 @@ class MainActivity : AppCompatActivity() {
             persistDateList(recievedDateList)
             handleFab()
         }
+
     }
 
     private fun navigateToAdddTaskActivity() {
@@ -214,6 +237,7 @@ class MainActivity : AppCompatActivity() {
 //            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 //
 //    }
+
 
 
     fun showTasksList() {

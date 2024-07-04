@@ -5,10 +5,12 @@ package com.example.testproject.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 import com.example.testproject.task.Task
+import com.google.android.material.textview.MaterialTextView
 
 class SearchTaskAdapter(
     var dateList: MutableList<Task>,
@@ -34,10 +36,13 @@ class SearchTaskAdapter(
 
     inner class SearchTaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val textViewDate = itemView.findViewById<TextView>(R.id.text_view_date)
-        fun bind(date: Task) {
+        val textViewDate = itemView.findViewById<MaterialTextView>(R.id.search_text_view_title)
+        val descViewDate = itemView.findViewById<MaterialTextView>(R.id.search_text_view_description)
+        val imageView = itemView.findViewById<ImageView>(R.id.search_image_view_task)
+        fun bind(task: Task) {
 
-            textViewDate.text = date.title
+            textViewDate.text = task.title
+            descViewDate.text = task.description
         }
     }
 }

@@ -18,7 +18,7 @@ import com.example.testproject.task.TaskDialogActivity
 
 class SearchActivity : AppCompatActivity() {
     var searchAdapter : SearchDateAdapter? = null
-    var resultList: ArrayList<Date> = arrayListOf()
+    var resultList: ArrayList<Date> = arrayListOf() 
 
 
     @SuppressLint("WrongViewCast")
