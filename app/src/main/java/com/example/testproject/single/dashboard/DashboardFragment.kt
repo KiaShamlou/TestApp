@@ -4,23 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.testproject.R
+import com.example.testproject.network.ApiInterface
+import com.example.testproject.network.RetrofitInstance
+import com.example.testproject.network.model.LaptopResponse
 import com.google.android.material.button.MaterialButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class DashboardFragment: Fragment() {
+class DashboardFragment : Fragment() {
 
 
     val viewModel: DashboardViewModel by viewModels()
+    var progressBar : ProgressBar? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = LayoutInflater.from(container?.context)
             .inflate(R.layout.fragment_dashboard, container, false)
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -28,13 +39,37 @@ class DashboardFragment: Fragment() {
         val navController = findNavController()
         val button = view.findViewById<MaterialButton>(R.id.button_search)
         val textViewSum = view.findViewById<TextView>(R.id.text_view_sum)
-
+        progressBar = view.findViewById<ProgressBar>(R.id.progressbar_loading)
         textViewSum.text = viewModel.a.toString()
         button.setOnClickListener {
 //            navController.navigate(R.id.action_fragment_dashboard_to_fragment_search)
             viewModel.a++
             textViewSum.text = viewModel.a.toString()
         }
+        getApiInterface()
     }
 
+    private fun getApiInterface() {
+
+        progressBar?.isVisible = true
+        val retrofit = RetrofitInstance.getInstance().create(ApiInterface::class.java)
+
+
+        val call = retrofit.getLaptopModel()
+        call.enqueue(object : Callback<List<LaptopResponse>> {
+            override fun onResponse(call: Call<List<LaptopResponse>>, response: Response<List<LaptopResponse>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Toast.makeText(requireContext(), response.body()?.size.toString()?:"", Toast.LENGTH_LONG).show()
+                }
+                progressBar?.isVisible = false
+            }
+
+            override fun onFailure(call: Call<List<LaptopResponse>>, t: Throwable) {
+                t.printStackTrace()
+                Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
+                progressBar?.isVisible = false
+            }
+        }
+        )
+    }
 }

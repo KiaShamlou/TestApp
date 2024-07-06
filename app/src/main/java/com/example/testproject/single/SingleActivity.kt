@@ -15,6 +15,5 @@ class SingleActivity: AppCompatActivity() {
         Log.d("TESTEST", "SingleActivity")
         setContentView(R.layout.activity_single)
 
-        Toast.makeText(this, "asda", Toast.LENGTH_LONG).show()
     }
 }
