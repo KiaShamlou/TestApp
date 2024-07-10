@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- todo kia here we place our communication with android OS -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -14,13 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestProject"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
+        <activity android:name=".single.SingleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
         </activity>
         <activity android:name=".task.TaskActivity" ></activity>
         <activity android:name=".date.DateActivity"/>
@@ -34,6 +41,7 @@
         <activity android:name=".date.AddDateDialogActivity"
             android:theme="@style/Theme.App.Dialog.NoTitle"
             android:excludeFromRecents="true" />
+        <activity android:name=".SearchActivity"/>
     </application>
 
 </manifest>
