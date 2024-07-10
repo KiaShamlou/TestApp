@@ -6,19 +6,11 @@ import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -231,7 +223,6 @@ class MainActivity : AppCompatActivity() {
 
     fun showDatesList() {
         var recyclerView = this.findViewById<RecyclerView>(R.id.recycler_view)
-        //NameAdapter adapter = new NameAdapter(namesList)
         dateAdapter = DateAdapter(DateManager.getDates(), ::showDateTasks)
         recyclerView.adapter = dateAdapter
         recyclerView.layoutManager =
@@ -252,7 +243,6 @@ class MainActivity : AppCompatActivity() {
     fun showTasksList() {
         var recyclerView2 = this.findViewById<RecyclerView>(R.id.recycler_view2)
 
-        //NameAdapter adapter = new NameAdapter(namesList)
         taskAdapter = TaskAdapter(
             DateManager.getCurrentTaskList(),
             ::navigateToTaskActivity,

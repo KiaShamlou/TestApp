@@ -6,7 +6,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testproject.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SingleActivity: AppCompatActivity() {
 
 
