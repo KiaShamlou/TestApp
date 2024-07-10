@@ -38,6 +38,7 @@ class DashboardFragment : Fragment() {
 
         val navController = findNavController()
         val button = view.findViewById<MaterialButton>(R.id.button_search)
+        val postsButton = view.findViewById<MaterialButton>(R.id.button_posts)
         val textViewSum = view.findViewById<TextView>(R.id.text_view_sum)
         progressBar = view.findViewById<ProgressBar>(R.id.progressbar_loading)
         textViewSum.text = viewModel.a.toString()
@@ -46,30 +47,10 @@ class DashboardFragment : Fragment() {
             viewModel.a++
             textViewSum.text = viewModel.a.toString()
         }
-        getApiInterface()
-    }
-
-    private fun getApiInterface() {
-
-        progressBar?.isVisible = true
-        val retrofit = RetrofitInstance.getInstance().create(ApiInterface::class.java)
-
-
-        val call = retrofit.getLaptopModel()
-        call.enqueue(object : Callback<List<LaptopResponse>> {
-            override fun onResponse(call: Call<List<LaptopResponse>>, response: Response<List<LaptopResponse>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    Toast.makeText(requireContext(), response.body()?.size.toString()?:"", Toast.LENGTH_LONG).show()
-                }
-                progressBar?.isVisible = false
-            }
-
-            override fun onFailure(call: Call<List<LaptopResponse>>, t: Throwable) {
-                t.printStackTrace()
-                Toast.makeText(requireContext(), t.message, Toast.LENGTH_LONG).show()
-                progressBar?.isVisible = false
-            }
+        postsButton.setOnClickListener(){
+            navController.navigate(R.id.action_fragment_dashboard_to_fragment_posts)
         }
-        )
     }
+
+
 }

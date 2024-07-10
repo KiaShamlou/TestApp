@@ -12,7 +12,14 @@
         <action
             android:id="@+id/action_fragment_dashboard_to_fragment_search"
             app:destination="@+id/fragment_search"/>
+        <action
+            android:id="@+id/action_fragment_dashboard_to_fragment_posts"
+            app:destination="@+id/fragment_posts"/>
     </fragment>
+    <fragment
+        android:id="@+id/fragment_posts"
+        android:name="com.example.testproject.single.posts.PostsFragment"
+        />
 
     <fragment
         android:id="@+id/fragment_search"

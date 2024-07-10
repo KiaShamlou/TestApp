@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://api.restful-api.dev/"
+    private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
     val client = OkHttpClient()
     val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val clientBuilder: OkHttpClient.Builder =
