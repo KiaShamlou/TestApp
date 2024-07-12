@@ -21,11 +21,9 @@ class PostsViewModel @Inject constructor(
     var list = MutableLiveData<List<PostResponse>>(listOf())
     var loading = MutableLiveData<Boolean>(false)
     init {
-
         getPosts()
     }
     fun getPosts(){
-
         Log.d("TESTEST", "get posts called")
         loading.value = true
         val call = postsService.getPosts()
