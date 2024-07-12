@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
 import com.example.testproject.network.model.PostResponse
+import com.example.testproject.network.model.UserResponse
+import com.example.testproject.task.Task
 import com.google.android.material.textview.MaterialTextView
 import retrofit2.Response
 
 
-class PostAdapter(var postsList: List<PostResponse>) :
+class PostAdapter(var postsList: List<PostResponse>,val onClick: (PostResponse) -> Unit) :
     RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
          val view = LayoutInflater.from(parent.context)
@@ -38,7 +40,10 @@ class PostAdapter(var postsList: List<PostResponse>) :
 
             titleTextView.text = postResponse.title.toString()
             idTextView.text = postResponse.id.toString()
-
+            itemView.setOnClickListener {
+                onClick(postResponse)
+                true
+            }
         }
 
     }
