@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UsersFragment : Fragment(R.layout.fragment_users_list) {
     var userAdapter: UserAdapter? = null
+    var userAdapter2: UserAdapter? = null
     val viewModel: UsersViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,6 +40,12 @@ class UsersFragment : Fragment(R.layout.fragment_users_list) {
         userAdapter = UserAdapter(usersList)
         recyclerView?.adapter = userAdapter
         recyclerView?.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        var recyclerView2 = view?.findViewById<RecyclerView>(R.id.users_recyclerview_2)
+        userAdapter2 = UserAdapter(usersList)
+        recyclerView2?.adapter = userAdapter2
+        recyclerView2?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 }

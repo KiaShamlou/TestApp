@@ -10,14 +10,18 @@ import retrofit2.http.Query
 
 
 interface PostsService {
-    @GET("posts")
-    fun getPosts(): Call<List<PostResponse>>
+
     @GET("users")
     fun getUsers(): Call<List<UserResponse>>
+
     @GET("/comments")
     fun getComments(
         @Query("postId") postId: String
     ): Call<List<CommentResponse>>
 
+    @GET("posts")
+    fun getPosts(): Call<List<PostResponse>>
 
+    @GET("posts")
+    suspend fun getPostsSuspended(): List<PostResponse>
 }

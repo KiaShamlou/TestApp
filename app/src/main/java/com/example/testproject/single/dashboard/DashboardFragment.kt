@@ -41,6 +41,7 @@ class DashboardFragment : Fragment() {
             viewModel.a++
             textViewSum.text = viewModel.a.toString()
         }
+
         postsButton.setOnClickListener(){
             navController.navigate(R.id.action_fragment_dashboard_to_fragment_posts)
         }

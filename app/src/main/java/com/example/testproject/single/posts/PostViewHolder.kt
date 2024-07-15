@@ -12,8 +12,12 @@ import com.example.testproject.task.Task
 import com.google.android.material.textview.MaterialTextView
 import retrofit2.Response
 
+interface PostClickedCallBack {
 
-class PostAdapter(var postsList: List<PostResponse>,val onClick: (PostResponse) -> Unit) :
+    fun postClicked(post: PostResponse)
+}
+
+class PostAdapter(var postsList: List<PostResponse>, val onClick: PostClickedCallBack) :
     RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
          val view = LayoutInflater.from(parent.context)
@@ -41,7 +45,7 @@ class PostAdapter(var postsList: List<PostResponse>,val onClick: (PostResponse) 
             titleTextView.text = postResponse.title.toString()
             idTextView.text = postResponse.id.toString()
             itemView.setOnClickListener {
-                onClick(postResponse)
+                onClick.postClicked(postResponse)
                 true
             }
         }
