@@ -22,16 +22,21 @@
         android:id="@+id/fragment_posts"
         android:name="com.example.testproject.single.posts.PostsFragment">
         <action
-            android:id="@+id/action_fragment_post_to_fragment_users"
-            app:destination="@+id/fragment_users" />
+            android:id="@+id/action_fragment_post_to_fragment_comments"
+            app:destination="@+id/fragment_comments" />
 
     </fragment>
     <fragment
         android:id="@+id/fragment_users"
         android:name="com.example.testproject.single.users.UsersFragment" >
-        <argument
-            android:name="USER_ID"
-            app:argType="string"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_comments"
+        android:name="com.example.testproject.single.comments.CommentsFragment">
+        <action
+            android:id="@+id/action_fragment_post_to_fragment_users"
+            app:destination="@+id/fragment_users" />
     </fragment>
 
 </navigation>

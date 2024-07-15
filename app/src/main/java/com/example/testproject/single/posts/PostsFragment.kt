@@ -31,8 +31,8 @@ class PostsFragment : Fragment(R.layout.fragmet_posts) {
 
     fun navigateToUsersFragmnet(user: PostResponse) {
         val bundle = Bundle()
-        bundle.putString("USER_ID",user.userId.toString())
-        findNavController().navigate(R.id.action_fragment_post_to_fragment_users, bundle)
+        bundle.putString("POST_ID",user.id.toString())
+        findNavController().navigate(R.id.action_fragment_post_to_fragment_comments, bundle)
     }
 
     fun showPostsList(postsList: List<PostResponse>) {
