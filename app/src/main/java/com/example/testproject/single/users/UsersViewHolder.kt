@@ -10,37 +10,36 @@ import com.example.testproject.network.model.UserResponse
 import com.google.android.material.textview.MaterialTextView
 
 
-class UserAdapter(var postsList: List<UserResponse>) :
+class UserAdapter(var UsersList: List<UserResponse>, val onClick: (UserResponse) -> Unit) :
     RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.user_item, parent, false)
         return UserViewHolder(view)
     }
+
     override fun getItemCount(): Int {
-        var a = postsList.size
+        var a = UsersList.size
         return a
     }
 
-
-
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.bind(postsList.get(position), position)
+        holder.bind(UsersList.get(position), position)
     }
 
-    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTextView = itemView.findViewById<MaterialTextView>(R.id.post_title)
         private val idTextView = itemView.findViewById<MaterialTextView>(R.id.post_id)
-        fun bind(userResponse: UserResponse ,  position: Int) {
+        fun bind(userResponse: UserResponse, position: Int) {
 
             titleTextView.text = userResponse.name
             idTextView.text = userResponse.id.toString()
-//            itemView.setOnClickListener {
-//                onClick(userResponse)
-//                true
-//            }
-        }
+            itemView.setOnClickListener {
+                onClick(userResponse)
+                true
+            }
 
+        }
     }
 }
 

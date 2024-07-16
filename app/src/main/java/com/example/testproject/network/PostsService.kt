@@ -1,5 +1,6 @@
 package com.example.testproject.network
 
+import com.example.testproject.network.model.AlbumResponse
 import com.example.testproject.network.model.CommentResponse
 import com.example.testproject.network.model.PostResponse
 import com.example.testproject.network.model.UserResponse
@@ -19,8 +20,10 @@ interface PostsService {
         @Query("postId") postId: String
     ): Call<List<CommentResponse>>
 
-    @GET("posts")
-    fun getPosts(): Call<List<PostResponse>>
+    @GET("albums")
+    suspend fun getAlbums(
+        @Query("userId") userId: String
+    ): List<AlbumResponse>
 
     @GET("posts")
     suspend fun getPostsSuspended(): List<PostResponse>

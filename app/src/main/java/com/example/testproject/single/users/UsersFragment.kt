@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.R
@@ -29,23 +30,17 @@ class UsersFragment : Fragment(R.layout.fragment_users_list) {
 
     }
 //
-//    fun navigateToUsersFragmnet(user: PostResponse) {
-//        val bundle = Bundle()
-//        bundle.putString("POST_ID",user.id.toString())
-//        findNavController().navigate(R.id.action_fragment_post_to_fragment_comments, bundle)
-//    }
+    fun navigateToAlbumsFragmnet(user: UserResponse) {
+        val bundle = Bundle()
+        bundle.putString("USER_ID",user.id.toString())
+        findNavController().navigate(R.id.action_fragment_users_to_fragment_albums, bundle)
+    }
 
     fun showUsersList(usersList: List<UserResponse>) {
         var recyclerView = view?.findViewById<RecyclerView>(R.id.users_recyclerview)
-        userAdapter = UserAdapter(usersList)
+        userAdapter = UserAdapter(usersList ,:: navigateToAlbumsFragmnet)
         recyclerView?.adapter = userAdapter
         recyclerView?.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        var recyclerView2 = view?.findViewById<RecyclerView>(R.id.users_recyclerview_2)
-        userAdapter2 = UserAdapter(usersList)
-        recyclerView2?.adapter = userAdapter2
-        recyclerView2?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 }
