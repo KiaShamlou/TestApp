@@ -24,12 +24,13 @@
         <action
             android:id="@+id/action_fragment_post_to_fragment_comments"
             app:destination="@+id/fragment_comments" />
-
     </fragment>
     <fragment
         android:id="@+id/fragment_users"
         android:name="com.example.testproject.single.users.UsersFragment" >
-
+        <action
+            android:id="@+id/action_fragment_users_to_fragment_albums"
+            app:destination="@+id/fragment_albums" />
     </fragment>
     <fragment
         android:id="@+id/fragment_comments"
@@ -38,5 +39,8 @@
             android:id="@+id/action_fragment_post_to_fragment_users"
             app:destination="@+id/fragment_users" />
     </fragment>
+    <fragment
+        android:id="@+id/fragment_albums"
+        android:name="com.example.testproject.single.albums.AlbumsFragment"/>
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.testproject.single.comments
+package com.example.testproject.single.albums
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -8,33 +8,37 @@ import com.example.testproject.network.PostsService
 import com.example.testproject.network.Resource
 import com.example.testproject.network.RetrofitInstance
 import com.example.testproject.network.model.AlbumResponse
-import com.example.testproject.network.model.CommentResponse
 import com.example.testproject.network.model.PostResponse
-import com.example.testproject.network.model.UserResponse
 import com.example.testproject.single.albums.data.AlbumRepository
-import com.example.testproject.single.albums.data.CommentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
 @HiltViewModel
-class CommentsViewModel @Inject constructor(
-    private val commentRepository: CommentRepository
+class AlbumsViewModel @Inject constructor(
+    private val albumRepository: AlbumRepository
 ): ViewModel() {
 
-    var comments = MutableStateFlow<Resource<List<CommentResponse>>>(Resource.Loading())
+    var albums = MutableStateFlow<Resource<List<AlbumResponse>>>(Resource.Loading())
 
-    fun getComments(userId: String){
+    fun getAlbums(userId: String){
         viewModelScope.launch {
-            commentRepository.getComments(userId).collect {
-                comments.value = it
+            albumRepository.getAlbums(userId).collect {
+                albums.value = it
             }
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+
+        Log.d("TESTEST", "oncleared")
+    }
 }
