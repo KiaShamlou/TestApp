@@ -3,12 +3,19 @@ package com.example.testproject.single.comments
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.testproject.network.PostsService
+import com.example.testproject.network.Resource
 import com.example.testproject.network.RetrofitInstance
+import com.example.testproject.network.model.AlbumResponse
 import com.example.testproject.network.model.CommentResponse
 import com.example.testproject.network.model.PostResponse
 import com.example.testproject.network.model.UserResponse
+import com.example.testproject.single.albums.data.AlbumRepository
+import com.example.testproject.single.albums.data.CommentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,38 +24,17 @@ import retrofit2.Response
 
 @HiltViewModel
 class CommentsViewModel @Inject constructor(
-    private val postsService: PostsService
+    private val commentRepository: CommentRepository
 ): ViewModel() {
 
-    var commentsList = MutableLiveData<List<CommentResponse>>(listOf())
-    var loading = MutableLiveData<Boolean>(false)
-//    var post = MutableLiveData<PostResponse>()
-    fun getComments(postId: String){
-//        if(list.value != null)return
-        loading.value = true
-        val call = postsService.getComments(postId)
-        call.enqueue(object : Callback<List<CommentResponse>> {
-            override fun onResponse(call: Call<List<CommentResponse>>, response: Response<List<CommentResponse>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    response.body()?.let {
-                        loading.value = false
-                        commentsList.value = it
-                    }
-                }
-            }
+    var comments = MutableStateFlow<Resource<List<CommentResponse>>>(Resource.Loading())
 
-            override fun onFailure(call: Call<List<CommentResponse>>, t: Throwable) {
-                t.printStackTrace()
-
-                loading.value = false
+    fun getComments(userId: String){
+        viewModelScope.launch {
+            commentRepository.getComments(userId).collect {
+                comments.value = it
             }
         }
-        )
     }
 
-    override fun onCleared() {
-        super.onCleared()
-
-        Log.d("TESTEST", "oncleared")
-    }
 }

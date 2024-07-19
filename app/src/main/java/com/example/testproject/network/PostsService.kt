@@ -8,19 +8,16 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-
-
-
 //hey this is from main branch
 interface PostsService {
 
     @GET("users")
-    fun getUsers(): Call<List<UserResponse>>
+    suspend fun getUsersSuspended(): List<UserResponse>
 
     @GET("/comments")
-    fun getComments(
+    suspend fun getComments(
         @Query("postId") postId: String
-    ): Call<List<CommentResponse>>
+    ): List<CommentResponse>
 
     @GET("albums")
     suspend fun getAlbums(
