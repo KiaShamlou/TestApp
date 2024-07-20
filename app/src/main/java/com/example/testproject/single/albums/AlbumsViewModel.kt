@@ -10,6 +10,7 @@ import com.example.testproject.network.RetrofitInstance
 import com.example.testproject.network.model.AlbumResponse
 import com.example.testproject.network.model.PostResponse
 import com.example.testproject.single.albums.data.AlbumRepository
+import com.example.testproject.single.albums.data.IAlbumRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.delay
@@ -21,9 +22,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
+
 @HiltViewModel
 class AlbumsViewModel @Inject constructor(
-    private val albumRepository: AlbumRepository
+    private val albumRepository: IAlbumRepository
 ): ViewModel() {
 
     var albums = MutableStateFlow<Resource<List<AlbumResponse>>>(Resource.Loading())

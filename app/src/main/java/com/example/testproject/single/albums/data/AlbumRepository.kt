@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
+
 class AlbumRepository @Inject constructor(
     private val postsService: PostsService
-) {
+): IAlbumRepository {
 
-    suspend fun getAlbums(userId: String): Flow<Resource<List<AlbumResponse>>> = flow {
+    override suspend fun getAlbums(userId: String): Flow<Resource<List<AlbumResponse>>> = flow {
         emit(Resource.Loading())
         val response = postsService.getAlbums(userId)
         emit(Resource.Success(response))
