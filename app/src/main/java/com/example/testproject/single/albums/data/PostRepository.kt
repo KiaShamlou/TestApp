@@ -1,6 +1,7 @@
 package com.example.testproject.single.albums.data
 
 import androidx.lifecycle.viewModelScope
+import com.example.testproject.network.ExampleJson2KtKotlin
 import com.example.testproject.network.PostsService
 import com.example.testproject.network.Resource
 import com.example.testproject.network.model.AlbumResponse
@@ -18,6 +19,9 @@ class PostRepository @Inject constructor(
 
     suspend fun getPosts(): Flow<Resource<List<PostResponse>>> = flow {
         emit(Resource.Loading())
+        postsService.geFilan(ExampleJson2KtKotlin(
+            "adasd", 12
+        ))
         val response = postsService.getPostsSuspended()
         emit(Resource.Success(response))
     }.catch {
